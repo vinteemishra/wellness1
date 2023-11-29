@@ -4,12 +4,12 @@ import {juggler} from '@loopback/repository';
 const config = {
   name: 'ht_db_mg',
   connector: 'mongodb',
-  // url: 'mongodb://htinitdbcreator:paSSw0rdX@127.0.0.1:27017/htinitdb',
-  host: '127.0.0.1',
+  // url: 'mongodb://myUserAdmin:Adminis%40123456@34.125.110.159:27017/?authMechanism=DEFAULT&authSource=admin',
+  host: '34.125.110.159',
   port: 27017,
-  user: 'htinitdbcreator',
-  password: 'paSSw0rdX',
-  database: 'htinitdb',
+  user: 'myUserAdmin',
+  password: 'Adminis@123456',
+  database: 'medtourism',
   useNewUrlParser: true
 };
 

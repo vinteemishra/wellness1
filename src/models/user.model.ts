@@ -5,27 +5,34 @@ export class User extends Entity {
   @property({
     type: 'string',
     id: true,
-    generated: true,
+    generated: false,
+    required: true,
   })
-  id?: string;
+  id: string;
 
   @property({
     type: 'string',
     required: true,
   })
-  user_name: string;
+  userName: string;
 
   @property({
     type: 'string',
     required: true,
   })
-  password_salt: string;
+  passwordSalt: string;
 
   @property({
     type: 'string',
     required: true,
   })
-  user_type: string;
+  userType: string;
+
+  @property({
+    type: 'date',
+    required: true,
+  })
+  createdOn: string;
 
 
   constructor(data?: Partial<User>) {
