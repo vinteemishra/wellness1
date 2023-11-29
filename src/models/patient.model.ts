@@ -1,8 +1,7 @@
-import {Entity, model, property, hasMany} from '@loopback/repository';
-import {Patient} from './patient.model';
+import {Entity, model, property} from '@loopback/repository';
 
 @model()
-export class User extends Entity {
+export class Patient extends Entity {
   @property({
     type: 'string',
     id: true,
@@ -15,25 +14,31 @@ export class User extends Entity {
     type: 'string',
     required: true,
   })
-  userName: string;
+  firstName: string;
 
   @property({
     type: 'string',
     required: true,
   })
-  passwordSalt: string;
+  lastName: string;
+
+  @property({
+    type: 'date',
+    required: true,
+  })
+  dob: Date;
 
   @property({
     type: 'string',
     required: true,
   })
-  userType: string;
+  gender: string;
 
   @property({
     type: 'string',
     required: true,
   })
-  phoneNumber: string;
+  phone: string;
 
   @property({
     type: 'string',
@@ -42,27 +47,29 @@ export class User extends Entity {
   email: string;
 
   @property({
+    type: 'date',
+    required: true,
+  })
+  createdOn: Date;
+
+  @property({
     type: 'string',
     required: true,
   })
   status: string;
 
   @property({
-    type: 'date',
-    required: true,
+    type: 'string',
   })
-  createdOn: Date;
+  userId?: string;
 
-  @hasMany(() => Patient)
-  patients: Patient[];
-
-  constructor(data?: Partial<User>) {
+  constructor(data?: Partial<Patient>) {
     super(data);
   }
 }
 
-export interface UserRelations {
+export interface PatientRelations {
   // describe navigational properties here
 }
 
-export type UserWithRelations = User & UserRelations;
+export type PatientWithRelations = Patient & PatientRelations;
