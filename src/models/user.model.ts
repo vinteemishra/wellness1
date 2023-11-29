@@ -1,4 +1,4 @@
-import {Entity, model, property, hasMany} from '@loopback/repository';
+import {Entity, hasMany, model, property} from '@loopback/repository';
 import {Patient} from './patient.model';
 
 @model()
@@ -15,13 +15,17 @@ export class User extends Entity {
     type: 'string',
     required: true,
   })
-  userName: string;
+  email: string;
 
   @property({
     type: 'string',
-    required: true,
   })
-  passwordSalt: string;
+  name?: string;
+
+  @property({
+    type: 'string',
+  })
+  passwordSalt?: string;
 
   @property({
     type: 'string',
@@ -33,13 +37,13 @@ export class User extends Entity {
     type: 'string',
     required: true,
   })
-  phoneNumber: string;
+  authenticationProvider: string;
 
   @property({
     type: 'string',
     required: true,
   })
-  email: string;
+  phoneNumber: string;
 
   @property({
     type: 'string',
