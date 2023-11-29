@@ -39,7 +39,8 @@ export class UserController {
         'application/json': {
           schema: getModelSchemaRef(User, {
             title: 'New User',
-            exclude: ['id', 'createdOn', 'status'],
+            exclude: ['id', 'createdOn', 'status', 'passwordSalt'],
+            optional: ['name',]
           }),
         },
       },
