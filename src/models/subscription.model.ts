@@ -1,5 +1,4 @@
-import {Entity, hasMany, model, property} from '@loopback/repository';
-import {Feature} from './feature.model';
+import {Entity, model, property} from '@loopback/repository';
 
 @model()
 export class Subscription extends Entity {
@@ -28,9 +27,6 @@ export class Subscription extends Entity {
     required: true,
   })
   status: string;
-
-  @hasMany(() => Feature)
-  features: Feature[];
 
   constructor(data?: Partial<Subscription>) {
     super(data);
