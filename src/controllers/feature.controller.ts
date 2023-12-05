@@ -24,8 +24,8 @@ import {generateUId} from '../utils';
 export class FeatureController {
   constructor(
     @repository(FeatureRepository)
-    public featureRepository : FeatureRepository,
-  ) {}
+    public featureRepository: FeatureRepository,
+  ) { }
 
   @post('/features')
   @response(200, {
@@ -46,7 +46,7 @@ export class FeatureController {
     feature: Feature,
   ): Promise<Feature> {
     feature.id = generateUId();
-    feature.createdOn = new Date();
+    feature.createdOn = new Date().toString();
     feature.status = 'Active';
     return this.featureRepository.create(feature);
   }
