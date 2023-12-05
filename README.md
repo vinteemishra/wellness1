@@ -27,6 +27,7 @@ npm start
 You can also run `node .` to skip the build step.
 
 Open http://127.0.0.1:3000 in your browser.
+If on server use server host name or public ip
 
 ## Rebuild the project
 
