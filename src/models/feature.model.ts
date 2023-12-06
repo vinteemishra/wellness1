@@ -1,4 +1,5 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, hasMany, model, property} from '@loopback/repository';
+import {Recipe} from './recipe.model';
 
 @model()
 export class Feature extends Entity {
@@ -32,13 +33,16 @@ export class Feature extends Entity {
     type: 'date',
     required: true,
   })
-  createdOn: string;
+  createdOn: Date;
 
   @property({
     type: 'string',
     required: true,
   })
   status: string;
+
+  @hasMany(() => Recipe)
+  recipes: Recipe[];
 
   constructor(data?: Partial<Feature>) {
     super(data);

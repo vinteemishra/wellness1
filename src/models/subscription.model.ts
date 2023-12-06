@@ -1,4 +1,5 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, hasMany} from '@loopback/repository';
+import {Recipe} from './recipe.model';
 
 @model()
 export class Subscription extends Entity {
@@ -33,6 +34,9 @@ export class Subscription extends Entity {
     required: true,
   })
   status: string;
+
+  @hasMany(() => Recipe)
+  recipes: Recipe[];
 
   constructor(data?: Partial<Subscription>) {
     super(data);

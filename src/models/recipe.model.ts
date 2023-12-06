@@ -28,6 +28,16 @@ export class Recipe extends Entity {
   })
   status: string;
 
+  @property({
+    type: 'string',
+  })
+  featureId?: string;
+
+  @property({
+    type: 'string',
+  })
+  subscriptionId?: string;
+
   constructor(data?: Partial<Recipe>) {
     super(data);
   }

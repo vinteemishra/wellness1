@@ -4,4 +4,5 @@ export * from './ping.controller';
 export * from './subscription.controller';
 export * from './user-patient.controller';
 export * from './user.controller';
-
+export * from './feature-recipe.controller';
+export * from './subscription-recipe.controller';
