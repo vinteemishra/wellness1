@@ -9,3 +9,4 @@ export * from './subscription-recipe.controller';
 export * from './recipe-feature.controller';
 export * from './recipe.controller';
 export * from './rating-user.controller';
+export * from './service-partner-rating.controller';

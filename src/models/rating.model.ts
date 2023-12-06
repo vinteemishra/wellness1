@@ -38,6 +38,11 @@ export class Rating extends Entity {
   @belongsTo(() => User)
   userId: string;
 
+  @property({
+    type: 'string',
+  })
+  servicePartnerId?: string;
+
   constructor(data?: Partial<Rating>) {
     super(data);
   }
