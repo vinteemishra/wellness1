@@ -8,3 +8,4 @@ export * from './feature-recipe.controller';
 export * from './subscription-recipe.controller';
 export * from './recipe-feature.controller';
 export * from './recipe.controller';
+export * from './rating-user.controller';
