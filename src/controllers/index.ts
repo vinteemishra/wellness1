@@ -6,3 +6,5 @@ export * from './user-patient.controller';
 export * from './user.controller';
 export * from './feature-recipe.controller';
 export * from './subscription-recipe.controller';
+export * from './recipe-feature.controller';
+export * from './recipe.controller';

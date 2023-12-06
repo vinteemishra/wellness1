@@ -1,4 +1,5 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, belongsTo} from '@loopback/repository';
+import {Feature} from './feature.model';
 
 @model()
 export class Recipe extends Entity {
@@ -27,16 +28,13 @@ export class Recipe extends Entity {
     required: true,
   })
   status: string;
-
-  @property({
-    type: 'string',
-  })
-  featureId?: string;
-
   @property({
     type: 'string',
   })
   subscriptionId?: string;
+
+  @belongsTo(() => Feature)
+  featureId: string;
 
   constructor(data?: Partial<Recipe>) {
     super(data);
