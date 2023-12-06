@@ -17,6 +17,12 @@ export class Subscription extends Entity {
   name: string;
 
   @property({
+    type: 'string',
+    required: true,
+  })
+  description: string;
+
+  @property({
     type: 'date',
     required: true,
   })

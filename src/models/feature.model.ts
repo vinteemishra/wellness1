@@ -17,6 +17,18 @@ export class Feature extends Entity {
   name: string;
 
   @property({
+    type: 'string',
+    required: true,
+  })
+  frequency: string;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
+  description: string;
+
+  @property({
     type: 'date',
     required: true,
   })

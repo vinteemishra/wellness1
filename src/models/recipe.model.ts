@@ -10,6 +10,23 @@ export class Recipe extends Entity {
   })
   id: string;
 
+  @property({
+    type: 'number',
+    required: true,
+  })
+  limit: number;
+
+  @property({
+    type: 'date',
+    required: true,
+  })
+  createdOn: Date;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
+  status: string;
 
   constructor(data?: Partial<Recipe>) {
     super(data);
