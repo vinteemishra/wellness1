@@ -6,3 +6,4 @@ export * from './recipe.repository';
 export * from './rating.repository';
 export * from './service-partner.repository';
 export * from './speciality.repository';
+export * from './physician.repository';

@@ -16,21 +16,21 @@ import {
   requestBody,
 } from '@loopback/rest';
 import {
+  Physician,
   Rating,
-  ServicePartner,
 } from '../models';
-import {ServicePartnerRepository} from '../repositories';
+import {PhysicianRepository} from '../repositories';
 import {generateUId} from '../utils';
 
-export class ServicePartnerRatingController {
+export class PhysicianRatingController {
   constructor(
-    @repository(ServicePartnerRepository) protected servicePartnerRepository: ServicePartnerRepository,
+    @repository(PhysicianRepository) protected physicianRepository: PhysicianRepository,
   ) { }
 
-  @get('/service-partners/{id}/ratings', {
+  @get('/physicians/{id}/ratings', {
     responses: {
       '200': {
-        description: 'Array of ServicePartner has many Rating',
+        description: 'Array of Physician has many Rating',
         content: {
           'application/json': {
             schema: {type: 'array', items: getModelSchemaRef(Rating)},
@@ -43,26 +43,26 @@ export class ServicePartnerRatingController {
     @param.path.string('id') id: string,
     @param.query.object('filter') filter?: Filter<Rating>,
   ): Promise<Rating[]> {
-    return this.servicePartnerRepository.ratings(id).find(filter);
+    return this.physicianRepository.ratings(id).find(filter);
   }
 
-  @post('/service-partners/{id}/ratings', {
+  @post('/physicians/{id}/ratings', {
     responses: {
       '200': {
-        description: 'ServicePartner model instance',
+        description: 'Physician model instance',
         content: {'application/json': {schema: getModelSchemaRef(Rating)}},
       },
     },
   })
   async create(
-    @param.path.string('id') id: typeof ServicePartner.prototype.id,
+    @param.path.string('id') id: typeof Physician.prototype.id,
     @requestBody({
       content: {
         'application/json': {
           schema: getModelSchemaRef(Rating, {
-            title: 'NewRatingInServicePartner',
-            exclude: ['id'],
-            optional: ['servicePartnerId']
+            title: 'NewRatingInPhysician',
+            exclude: ['id', 'createdOn'],
+            optional: ['physicianId']
           }),
         },
       },
@@ -70,13 +70,13 @@ export class ServicePartnerRatingController {
   ): Promise<Rating> {
     rating.id = generateUId();
     rating.createdOn = new Date();
-    return this.servicePartnerRepository.ratings(id).create(rating);
+    return this.physicianRepository.ratings(id).create(rating);
   }
 
-  @patch('/service-partners/{id}/ratings', {
+  @patch('/physicians/{id}/ratings', {
     responses: {
       '200': {
-        description: 'ServicePartner.Rating PATCH success count',
+        description: 'Physician.Rating PATCH success count',
         content: {'application/json': {schema: CountSchema}},
       },
     },
@@ -93,13 +93,13 @@ export class ServicePartnerRatingController {
     rating: Partial<Rating>,
     @param.query.object('where', getWhereSchemaFor(Rating)) where?: Where<Rating>,
   ): Promise<Count> {
-    return this.servicePartnerRepository.ratings(id).patch(rating, where);
+    return this.physicianRepository.ratings(id).patch(rating, where);
   }
 
-  @del('/service-partners/{id}/ratings', {
+  @del('/physicians/{id}/ratings', {
     responses: {
       '200': {
-        description: 'ServicePartner.Rating DELETE success count',
+        description: 'Physician.Rating DELETE success count',
         content: {'application/json': {schema: CountSchema}},
       },
     },
@@ -108,6 +108,6 @@ export class ServicePartnerRatingController {
     @param.path.string('id') id: string,
     @param.query.object('where', getWhereSchemaFor(Rating)) where?: Where<Rating>,
   ): Promise<Count> {
-    return this.servicePartnerRepository.ratings(id).delete(where);
+    return this.physicianRepository.ratings(id).delete(where);
   }
 }

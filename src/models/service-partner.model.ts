@@ -1,5 +1,6 @@
-import {Entity, model, property, hasMany} from '@loopback/repository';
+import {Entity, hasMany, model, property, referencesMany} from '@loopback/repository';
 import {Rating} from './rating.model';
+import {Speciality} from './speciality.model';
 
 @model()
 export class ServicePartner extends Entity {
@@ -75,7 +76,7 @@ export class ServicePartner extends Entity {
     type: 'date',
     required: true,
   })
-  createdOn: string;
+  createdOn: Date;
 
   @property({
     type: 'string',
@@ -85,6 +86,9 @@ export class ServicePartner extends Entity {
 
   @hasMany(() => Rating)
   ratings: Rating[];
+
+  @referencesMany(() => Speciality)
+  specialityIds: string[];
 
   constructor(data?: Partial<ServicePartner>) {
     super(data);

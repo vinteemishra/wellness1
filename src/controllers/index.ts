@@ -11,3 +11,6 @@ export * from './recipe.controller';
 export * from './rating-user.controller';
 export * from './service-partner-rating.controller';
 export * from './speciality.controller';
+export * from './physician-rating.controller';
+export * from './physician.controller';
+export * from './service-partner.controller';

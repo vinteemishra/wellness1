@@ -7,18 +7,19 @@ import {
   Where,
 } from '@loopback/repository';
 import {
-  post,
-  param,
+  del,
   get,
   getModelSchemaRef,
+  param,
   patch,
+  post,
   put,
-  del,
   requestBody,
   response,
 } from '@loopback/rest';
 import {Speciality} from '../models';
 import {SpecialityRepository} from '../repositories';
+import {generateUId} from '../utils';
 
 export class SpecialityController {
   constructor(
@@ -37,13 +38,15 @@ export class SpecialityController {
         'application/json': {
           schema: getModelSchemaRef(Speciality, {
             title: 'NewSpeciality',
-            
+            exclude : ['id', 'createdOn']
           }),
         },
       },
     })
     speciality: Speciality,
   ): Promise<Speciality> {
+    speciality.id = generateUId();
+    speciality.createdOn = new Date();
     return this.specialityRepository.create(speciality);
   }
 

@@ -6,3 +6,4 @@ export * from './recipe.model';
 export * from './rating.model';
 export * from './service-partner.model';
 export * from './speciality.model';
+export * from './physician.model';
