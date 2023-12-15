@@ -1,8 +1,7 @@
-import {Entity, hasMany, model, property} from '@loopback/repository';
-import {Recipe} from './recipe.model';
+import {Entity, model, property} from '@loopback/repository';
 
 @model()
-export class Feature extends Entity {
+export class Speciality extends Entity {
   @property({
     type: 'string',
     id: true,
@@ -21,13 +20,13 @@ export class Feature extends Entity {
     type: 'string',
     required: true,
   })
-  frequency: string;
+  category: string;
 
   @property({
     type: 'string',
     required: true,
   })
-  description: string;
+  details: string;
 
   @property({
     type: 'date',
@@ -41,16 +40,14 @@ export class Feature extends Entity {
   })
   status: string;
 
-  @hasMany(() => Recipe)
-  recipes: Recipe[];
 
-  constructor(data?: Partial<Feature>) {
+  constructor(data?: Partial<Speciality>) {
     super(data);
   }
 }
 
-export interface FeatureRelations {
+export interface SpecialityRelations {
   // describe navigational properties here
 }
 
-export type FeatureWithRelations = Feature & FeatureRelations;
+export type SpecialityWithRelations = Speciality & SpecialityRelations;

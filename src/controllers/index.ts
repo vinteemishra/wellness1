@@ -4,4 +4,13 @@ export * from './ping.controller';
 export * from './subscription.controller';
 export * from './user-patient.controller';
 export * from './user.controller';
-
+export * from './feature-recipe.controller';
+export * from './subscription-recipe.controller';
+export * from './recipe-feature.controller';
+export * from './recipe.controller';
+export * from './rating-user.controller';
+export * from './service-partner-rating.controller';
+export * from './speciality.controller';
+export * from './physician-rating.controller';
+export * from './physician.controller';
+export * from './service-partner.controller';
