@@ -46,7 +46,7 @@ export class FeatureController {
     feature: Feature,
   ): Promise<Feature> {
     feature.id = generateUId();
-    feature.createdOn = new Date().toString();
+    feature.createdOn = new Date();
     feature.status = 'Active';
     return this.featureRepository.create(feature);
   }
