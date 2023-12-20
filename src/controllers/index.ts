@@ -14,3 +14,4 @@ export * from './speciality.controller';
 export * from './physician-rating.controller';
 export * from './physician.controller';
 export * from './service-partner.controller';
+export * from './userinfo.controller';

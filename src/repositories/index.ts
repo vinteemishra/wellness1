@@ -7,3 +7,4 @@ export * from './rating.repository';
 export * from './service-partner.repository';
 export * from './speciality.repository';
 export * from './physician.repository';
+export * from './user1.repository';

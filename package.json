@@ -57,6 +57,8 @@
     "@loopback/rest": "^13.1.2",
     "@loopback/rest-explorer": "^6.1.2",
     "@loopback/service-proxy": "^6.1.2",
+    "@types/lodash": "^4.14.202",
+    "isemail": "^3.2.0",
     "loopback-connector-mongodb": "^5.6.0",
     "tslib": "^2.0.0",
     "uuid": "^9.0.1"
