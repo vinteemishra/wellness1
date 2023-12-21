@@ -8,3 +8,4 @@ export * from './service-partner.model';
 export * from './speciality.model';
 export * from './physician.model';
 export * from './user1.model';
+export * from './user-signup.model';

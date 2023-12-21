@@ -1,20 +1,17 @@
 import {Entity, model, property} from '@loopback/repository';
 
 @model()
-export class user1 extends Entity {
+export class UserSignup extends Entity {
   @property({
     type: 'number',
     id: true,
-    generated: true,
+    generated: false,
   })
   id?: number;
 
   @property({
     type: 'string',
     required: true,
-    index: {
-      unique: true, // Set to true to enforce uniqueness
-    },
   })
   email: string;
 
@@ -25,19 +22,28 @@ export class user1 extends Entity {
   password: string;
 
   @property({
+    type: 'date',
+    jsonSchema: {
+      format: 'date',
+    },
+  })
+
+  date_of_birth?: Date;
+
+  @property({
     type: 'string',
     required: true,
   })
-  date_of_birth: string;
+  contact_no: string;
 
 
-  constructor(data?: Partial<user1>) {
+  constructor(data?: Partial<UserSignup>) {
     super(data);
   }
 }
 
-export interface User1Relations {
+export interface UserSignupRelations {
   // describe navigational properties here
 }
 
-export type User1WithRelations = user1 & User1Relations;
+export type UserSignupWithRelations = UserSignup & UserSignupRelations;

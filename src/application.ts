@@ -13,6 +13,7 @@ import {
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import {MySequence} from './sequence';
+import {BcyptHasher} from './services/encrypt_password';
 export {ApplicationConfig};
 
 export class HtApiApplication extends BootMixin(
@@ -20,6 +21,8 @@ export class HtApiApplication extends BootMixin(
 ) {
   constructor(options: ApplicationConfig = {}) {
     super(options);
+    // set up bindings
+    this.setupBinding();
 
     // Set up the custom sequence
     this.sequence(MySequence);
@@ -48,4 +51,9 @@ export class HtApiApplication extends BootMixin(
     // Mount jwt component
     this.component(JWTAuthenticationComponent);
   }
+   setupBinding():void{
+    this.bind('service.hasher').toClass(BcyptHasher);
+    this.bind('rounds').to(10);
+
+   }
 }
