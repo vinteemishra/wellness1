@@ -1,3 +1,7 @@
+// import { getJsonSchemaRef, post, requestBody } from '@loopback/rest';
+import { getJsonSchemaRef, post, requestBody } from '@loopback/rest';
+
+
 export const CredentialsSchema={
   type:'object',
   required:['email','password'],
@@ -20,3 +24,5 @@ export const CredentialsRequestBody={
     'application/json':{schema: CredentialsSchema},
   },
 };
+
+
