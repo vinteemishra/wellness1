@@ -11,7 +11,7 @@ import {UserSignupRepository} from '../repositories';
 import {BcyptHasher} from '../services/encrypt_password';
 import {MyUserService} from '../services/user_service';
 import {validatecredentials} from '../services/validator';
-import{UserService} from '@loopback/authentication';
+import {TokenService} from '@loopback/authentication';
 
 
 export class UserSignupController {
@@ -22,6 +22,8 @@ export class UserSignupController {
     public hasher: BcyptHasher,
     @inject('services.user.service')
     public userService: MyUserService,
+    // @inject('services.jwt.service') public jwtService: TokenService,
+
 
   ) { }
   @post("/signup", {
@@ -69,6 +71,7 @@ export class UserSignupController {
       },
     },
   })
+
   async login(
     @requestBody({
       content: {
@@ -76,22 +79,25 @@ export class UserSignupController {
           schema: {
             type: 'object',
             properties: {
-              email: {type: 'string', format: 'email'},
-              password: {type: 'string', minLength: 8},
+              email: { type: 'string', format: 'email' },
+              password: { type: 'string', minLength: 8 },
             },
-            required: ['email,password'],
+            required: ['email', 'password'],
           }
         }
       }
     }) credentials: Credentials,
-  ): Promise<{token: string}> {
+  ): Promise<{ token: string }> {
+    console.log('Login method called'); // Add this log statement
     console.log(credentials);
     console.log("helloooo");
     const user = await this.userService.verifyCredentials(credentials);
-    console.log(user);
+    // console.log(user);
     console.log("hello");
-    return Promise.resolve({token: '899009888'});
+    return Promise.resolve({ token: '899009888' });
+    // const token = await this.jwtService.generateToken(user);
+
+    // return { token };
+
   }
-
-
 }

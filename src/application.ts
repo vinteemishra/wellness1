@@ -37,7 +37,7 @@ export class HtApiApplication extends BootMixin(
     });
     this.component(RestExplorerComponent);
 
-    this.projectRoot = __dirname;
+   this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here
     this.bootOptions = {
       controllers: {
@@ -55,7 +55,8 @@ export class HtApiApplication extends BootMixin(
    setupBinding():void{
     this.bind('service.hasher').toClass(BcyptHasher);
     this.bind('rounds').to(10);
-    this.bind('services.user.service').toClass(MyUserService)
+    this.bind('services.user.service').toClass(MyUserService);
+
 
    }
 }

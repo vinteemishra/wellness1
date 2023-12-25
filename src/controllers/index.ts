@@ -16,3 +16,4 @@ export * from './physician.controller';
 export * from './service-partner.controller';
 export * from './userinfo.controller';
 export * from './user-signup.controller';
+export * from './hospital.controller';

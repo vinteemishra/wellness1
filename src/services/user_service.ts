@@ -8,9 +8,12 @@ import {repository} from '@loopback/repository';
 import {BcyptHasher} from './encrypt_password';
 import {inject} from '@loopback/core';
 import {HttpErrors} from '@loopback/rest';
+import { injectable } from '@loopback/context';
+// import { Credentials } from '@loopback/authentication-jwt';
+
 // import {UserProfile} from '@loopback/authentication';
 
-
+@injectable()
 export class MyUserService implements UserService<UserSignup,Credentials>{
   constructor(
     @repository(UserSignupRepository)
@@ -19,10 +22,11 @@ export class MyUserService implements UserService<UserSignup,Credentials>{
     public hasher:BcyptHasher
   ){}
   async verifyCredentials(credentials: Credentials): Promise<UserSignup> {
+    console.log('Verifying credentials:', credentials);
     console.log("bye");
     const foundUser=await this.userRepository.findOne({
       where:{
-        email:credentials.email,
+        email: { ilike: credentials.email },
       },
 
     });console.log(foundUser)
