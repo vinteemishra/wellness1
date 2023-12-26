@@ -2,7 +2,8 @@
 
 import {inject} from '@loopback/core';
 // import {UserRepository} from '@loopback/authentication-jwt';
-import {Credentials} from '@loopback/authentication-jwt';
+import {Credentials} from '../repositories/user-signup.repository'
+// import {Credentials} from '@loopback/authentication-jwt';
 import {repository} from '@loopback/repository';
 import {getJsonSchemaRef, post, requestBody} from '@loopback/rest';
 import * as _ from 'lodash';
@@ -12,6 +13,7 @@ import {BcyptHasher} from '../services/encrypt_password';
 import {MyUserService} from '../services/user_service';
 import {validatecredentials} from '../services/validator';
 import {TokenService} from '@loopback/authentication';
+import {HttpErrors} from '@loopback/rest';
 
 
 export class UserSignupController {
@@ -20,8 +22,10 @@ export class UserSignupController {
     public UserSignupRepository: UserSignupRepository,
     @inject('service.hasher')
     public hasher: BcyptHasher,
-    @inject('services.user.service')
+    @inject('services.user_service')
     public userService: MyUserService,
+
+
     // @inject('services.jwt.service') public jwtService: TokenService,
 
 
@@ -88,16 +92,23 @@ export class UserSignupController {
       }
     }) credentials: Credentials,
   ): Promise<{ token: string }> {
-    console.log('Login method called'); // Add this log statement
+    console.log('Login method called');
+    console.log("credentials");
     console.log(credentials);
     console.log("helloooo");
-    const user = await this.userService.verifyCredentials(credentials);
-    // console.log(user);
-    console.log("hello");
-    return Promise.resolve({ token: '899009888' });
-    // const token = await this.jwtService.generateToken(user);
+    try {
+      const user = await this.userService.verifyCredentials(credentials);
+      console.log("User:", user);
 
-    // return { token };
+      // Proceed with generating the token or any other logic
 
+      return Promise.resolve({ token: '899009888' });
+    } catch (error) {
+      // Catch and handle the error appropriately
+      console.error('Error during login:', error);
+
+      // You might want to throw a specific error or handle it in another way
+      return Promise.reject(new HttpErrors.Unauthorized('Invalid credentials'));
+    }
   }
 }

@@ -15,7 +15,12 @@ import path from 'path';
 import {MySequence} from './sequence';
 import {BcyptHasher} from './services/encrypt_password';
 import {MyUserService} from './services/user_service';
+import {HtDbMgDataSource} from './datasources';
 export {ApplicationConfig};
+import {
+  SECURITY_SCHEME_SPEC,
+  UserServiceBindings,
+} from '@loopback/authentication-jwt';
 
 export class HtApiApplication extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
@@ -37,7 +42,7 @@ export class HtApiApplication extends BootMixin(
     });
     this.component(RestExplorerComponent);
 
-   this.projectRoot = __dirname;
+    this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here
     this.bootOptions = {
       controllers: {
@@ -51,12 +56,13 @@ export class HtApiApplication extends BootMixin(
     this.component(AuthenticationComponent);
     // Mount jwt component
     this.component(JWTAuthenticationComponent);
+    this.dataSource(HtDbMgDataSource, UserServiceBindings.DATASOURCE_NAME);
   }
-   setupBinding():void{
+  setupBinding(): void {
     this.bind('service.hasher').toClass(BcyptHasher);
     this.bind('rounds').to(10);
-    this.bind('services.user.service').toClass(MyUserService);
+    this.bind('services.user_service').toClass(MyUserService);
 
 
-   }
+  }
 }

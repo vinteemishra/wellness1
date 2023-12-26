@@ -26,10 +26,17 @@ export class MyUserService implements UserService<UserSignup,Credentials>{
     console.log("bye");
     const foundUser=await this.userRepository.findOne({
       where:{
-        email: { ilike: credentials.email },
+        email:credentials.email,
+
       },
 
+
     });console.log(foundUser)
+    console.log("email");
+    console.log('Found user:', foundUser);
+    console.log(credentials.email)
+
+
     console.log("hiii")
     if(!foundUser){
       throw new HttpErrors.NotFound('user not found with this ${credentials.email}',
