@@ -56,6 +56,11 @@ export class Hospital extends Entity {
   @property.array(String)
   accreditations?: string[];
 
+  @property({
+    type: 'string',
+  })
+  specialty?: string;
+
 
   constructor(data?: Partial<Hospital>) {
     super(data);
