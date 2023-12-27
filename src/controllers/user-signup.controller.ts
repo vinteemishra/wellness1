@@ -2,18 +2,30 @@
 
 import {inject} from '@loopback/core';
 // import {UserRepository} from '@loopback/authentication-jwt';
-import {Credentials} from '../repositories/user-signup.repository'
+import {Credentials} from '../repositories/user-signup.repository';
 // import {Credentials} from '@loopback/authentication-jwt';
 import {repository} from '@loopback/repository';
-import {getJsonSchemaRef, post, requestBody} from '@loopback/rest';
+import {HttpErrors, getJsonSchemaRef, post, requestBody} from '@loopback/rest';
 import * as _ from 'lodash';
 import {UserSignup} from '../models';
 import {UserSignupRepository} from '../repositories';
 import {BcyptHasher} from '../services/encrypt_password';
 import {MyUserService} from '../services/user_service';
 import {validatecredentials} from '../services/validator';
-import {TokenService} from '@loopback/authentication';
-import {HttpErrors} from '@loopback/rest';
+
+// Assuming you have Node.js environment
+const crypto = require('crypto');
+
+function generateToken(length = 32) {
+  return crypto.randomBytes(Math.ceil(length / 2))
+    .toString('hex')
+    .slice(0, length);
+}
+
+// Example usage
+const token = generateToken();
+// console.log('Generated Token:', token);
+
 
 
 export class UserSignupController {
@@ -83,15 +95,15 @@ export class UserSignupController {
           schema: {
             type: 'object',
             properties: {
-              email: { type: 'string', format: 'email' },
-              password: { type: 'string', minLength: 8 },
+              email: {type: 'string', format: 'email'},
+              password: {type: 'string', minLength: 8},
             },
             required: ['email', 'password'],
           }
         }
       }
     }) credentials: Credentials,
-  ): Promise<{ token: string }> {
+  ): Promise<{token: string}> {
     console.log('Login method called');
     console.log("credentials");
     console.log(credentials);
@@ -102,7 +114,15 @@ export class UserSignupController {
 
       // Proceed with generating the token or any other logic
 
-      return Promise.resolve({ token: '899009888' });
+      // return Promise.resolve({token: '899009888'});
+      const generatedToken = '899009888'; // Replace this with your actual token generation logic
+      const response = {
+        token: token,
+        status: '200', // Add the status you want to send
+      };
+
+      return Promise.resolve(response);
+      // return Promise.resolve({token: '899009888'});
     } catch (error) {
       // Catch and handle the error appropriately
       console.error('Error during login:', error);

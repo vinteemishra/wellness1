@@ -53,6 +53,9 @@ export class Hospital extends Entity {
   })
   image?: string;
 
+  @property.array(String)
+  accreditations?: string[];
+
 
   constructor(data?: Partial<Hospital>) {
     super(data);
