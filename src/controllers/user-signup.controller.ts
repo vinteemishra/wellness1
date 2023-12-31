@@ -7,11 +7,34 @@ import {Credentials} from '../repositories/user-signup.repository';
 import {repository} from '@loopback/repository';
 import {HttpErrors, getJsonSchemaRef, post, requestBody} from '@loopback/rest';
 import * as _ from 'lodash';
-import {UserSignup} from '../models';
-import {UserSignupRepository} from '../repositories';
+import {Token, UserSignup} from '../models';
+import {TokenRepository, UserSignupRepository} from '../repositories';
 import {BcyptHasher} from '../services/encrypt_password';
 import {MyUserService} from '../services/user_service';
 import {validatecredentials} from '../services/validator';
+// import* from '../utils/sendMail';
+// import * as sendMail from '../utils/sendMail';
+import {HtDbMgDataSource} from '../datasources';
+import {sendEmail} from '../utils/sendMail';
+import * as nodemailer from 'nodemailer';
+import * as dotenv from 'dotenv';
+import {get} from '@loopback/rest';
+import { param } from '@loopback/rest';
+
+
+import {DefaultCrudRepository, juggler} from '@loopback/repository';
+
+
+
+
+
+// Load environment variables from .env file
+dotenv.config()
+
+
+
+
+
 
 // Assuming you have Node.js environment
 const crypto = require('crypto');
@@ -29,6 +52,8 @@ const token = generateToken();
 
 
 export class UserSignupController {
+  private tokenRepository: TokenRepository;
+
   constructor(
     @repository(UserSignupRepository)
     public UserSignupRepository: UserSignupRepository,
@@ -41,7 +66,25 @@ export class UserSignupController {
     // @inject('services.jwt.service') public jwtService: TokenService,
 
 
-  ) { }
+  ) {     this.tokenRepository = new TokenRepository(new HtDbMgDataSource());
+  }
+
+  @get('/{id}/verify/{token}')
+async verifyEmail(
+  @param.path.number('id') userId: number,
+  @param.path.string('token') token: string,
+): Promise<{ message: string }> {
+  try {
+    const user = await this.UserSignupRepository.findById(userId);
+    // ... (rest of the method)
+
+    return { message: 'Email verified successfully' };
+  } catch (error) {
+    console.error('Error during email verification:', error);
+    throw new HttpErrors.InternalServerError('Internal Server Error');
+  }
+}
+
   @post("/signup", {
     responses: {
       '200': {
@@ -58,15 +101,42 @@ export class UserSignupController {
     const saveduser = await this.UserSignupRepository.create(userdata);
     delete (saveduser as {password?: string}).password;
 
+    
+
+    const tokenInstance = new Token({
+      id: userdata.id,
+      token: crypto.randomBytes(32).toString("hex"),
+    });
+
+    // Assuming TokenRepository is your repository for Token model
+    const dataSource = new HtDbMgDataSource();
+    const tokenRepository = new TokenRepository(dataSource);
+
+    const savedToken = await tokenRepository.create(tokenInstance);
+    console.log("hi", savedToken);
+
+
+    // const url = `${process.env.BASE_URL}/users/${saveduser.id}/verify/${token.token}`;
+    const url = `${process.env.BASE_URL}/users/${saveduser.id}/verify/${savedToken.token}`;
+    // const url = `${process.env.BASE_URL}/users/${encodeURIComponent(saveduser.id)}/verify/${encodeURIComponent(savedToken.token)}`;
+
+
+
+
+    await sendEmail(saveduser.email, "verify email", url);
+    console.log("hellooo",saveduser.email);
     // delete saveduser.password;
     // return saveduser;
     return {
       status: 200,
       data: {
-        user: saveduser,
+        msg: "An email sent to ypor account  plz verify",
       }
     }
   }
+
+
+
   // @post('/users/login')
   @post('/login', {
     responses: {
@@ -115,11 +185,13 @@ export class UserSignupController {
       // Proceed with generating the token or any other logic
 
       // return Promise.resolve({token: '899009888'});
-      const generatedToken = '899009888'; // Replace this with your actual token generation logic
+      // const generatedToken = '899009888'; // Replace this with your actual token generation logic
       const response = {
         token: token,
         status: '200', // Add the status you want to send
       };
+      // const userprofile=await this.userService.convertToUserProfile(user);
+      // console.log("new",userprofile);
 
       return Promise.resolve(response);
       // return Promise.resolve({token: '899009888'});

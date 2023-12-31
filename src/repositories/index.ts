@@ -11,3 +11,4 @@ export * from './user1.repository';
 export * from './user-signup.repository';
 export * from './hospital.repository';
 
+export * from './token.repository';

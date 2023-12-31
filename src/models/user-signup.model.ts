@@ -36,6 +36,11 @@ export class UserSignup extends Entity {
   })
   contact_no: string;
 
+  @property({
+    type: 'boolean',
+    default: false,
+  })
+  verified?: boolean;
 
   constructor(data?: Partial<UserSignup>) {
     super(data);

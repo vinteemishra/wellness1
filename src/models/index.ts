@@ -10,3 +10,4 @@ export * from './physician.model';
 export * from './user1.model';
 export * from './user-signup.model';
 export * from './hospital.model';
+export * from './token.model';
