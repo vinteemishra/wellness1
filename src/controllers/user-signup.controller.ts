@@ -23,13 +23,15 @@ import { param } from '@loopback/rest';
 
 
 import {DefaultCrudRepository, juggler} from '@loopback/repository';
+require('dotenv').config();
+
 
 
 
 
 
 // Load environment variables from .env file
-dotenv.config()
+// dotenv.config()
 
 
 
@@ -69,15 +71,16 @@ export class UserSignupController {
   ) {     this.tokenRepository = new TokenRepository(new HtDbMgDataSource());
   }
 
-  @get('/{id}/verify/{token}')
-async verifyEmail(
-  @param.path.number('id') userId: number,
-  @param.path.string('token') token: string,
+  @get('/users/{id}/verifyEmail/{token1}')
+  async verifyEmail(
+  @param.path.string('id') id: string,
+  @param.path.string('token1') token1: string,
 ): Promise<{ message: string }> {
   try {
-    const user = await this.UserSignupRepository.findById(userId);
-    // ... (rest of the method)
-
+    const user = await this.UserSignupRepository.findById(id);
+    console.log("happy",user)
+    user.verified = true;
+    await this.UserSignupRepository.update(user);
     return { message: 'Email verified successfully' };
   } catch (error) {
     console.error('Error during email verification:', error);
@@ -101,11 +104,11 @@ async verifyEmail(
     const saveduser = await this.UserSignupRepository.create(userdata);
     delete (saveduser as {password?: string}).password;
 
-    
+
 
     const tokenInstance = new Token({
-      id: userdata.id,
-      token: crypto.randomBytes(32).toString("hex"),
+      id: saveduser.id,
+      token1: crypto.randomBytes(32).toString("hex"),
     });
 
     // Assuming TokenRepository is your repository for Token model
@@ -117,7 +120,7 @@ async verifyEmail(
 
 
     // const url = `${process.env.BASE_URL}/users/${saveduser.id}/verify/${token.token}`;
-    const url = `${process.env.BASE_URL}/users/${saveduser.id}/verify/${savedToken.token}`;
+    const url = `${process.env.BASE_URL}/users/${saveduser.id}/verifyEmail/${savedToken.token1}`;
     // const url = `${process.env.BASE_URL}/users/${encodeURIComponent(saveduser.id)}/verify/${encodeURIComponent(savedToken.token)}`;
 
 
@@ -130,7 +133,7 @@ async verifyEmail(
     return {
       status: 200,
       data: {
-        msg: "An email sent to ypor account  plz verify",
+        msg: "An email sent to your account  plz verify",
       }
     }
   }
@@ -179,8 +182,10 @@ async verifyEmail(
     console.log(credentials);
     console.log("helloooo");
     try {
+
       const user = await this.userService.verifyCredentials(credentials);
       console.log("User:", user);
+      if (user.verified) {
 
       // Proceed with generating the token or any other logic
 
@@ -193,7 +198,8 @@ async verifyEmail(
       // const userprofile=await this.userService.convertToUserProfile(user);
       // console.log("new",userprofile);
 
-      return Promise.resolve(response);
+      return Promise.resolve(response);}
+      else{throw new HttpErrors.Unauthorized('Email not verified');}
       // return Promise.resolve({token: '899009888'});
     } catch (error) {
       // Catch and handle the error appropriately

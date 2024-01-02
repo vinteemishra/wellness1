@@ -2,7 +2,9 @@ import * as nodemailer from 'nodemailer';
 import * as dotenv from 'dotenv';
 
 // Load environment variables from .env file
-dotenv.config();
+require('dotenv').config();
+
+// dotenv.config();
 
 export async function sendEmail(email: string, subject: string, text: string) {
   try {
@@ -16,7 +18,7 @@ export async function sendEmail(email: string, subject: string, text: string) {
         pass: process.env.PASS,
       },
     });
-    // console.log(transporter);
+    console.log("trantorter",transporter);
 
     await transporter.sendMail({
       from: process.env.USER,
