@@ -35,10 +35,20 @@ export class Hospital extends Entity {
   })
   location?: string;
 
+  // @property({
+  //   type: 'string',
+
+  // })
+  // address?: string;
+
   @property({
     type: 'string',
+    required: true,
+    index: {
+      unique: true,
+    },
   })
-  address?: string;
+  address: string;
 
   @property.array(String)
   departments?: string[];

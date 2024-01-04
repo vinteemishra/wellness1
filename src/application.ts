@@ -1,3 +1,5 @@
+
+import {join} from 'path';
 import {AuthenticationComponent} from '@loopback/authentication';
 import {
   JWTAuthenticationComponent
@@ -21,6 +23,8 @@ import {
   SECURITY_SCHEME_SPEC,
   UserServiceBindings,
 } from '@loopback/authentication-jwt';
+import {Storage} from '@google-cloud/storage';
+
 
 export class HtApiApplication extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
@@ -29,6 +33,20 @@ export class HtApiApplication extends BootMixin(
     super(options);
     // set up bindings
     this.setupBinding();
+
+    // this.bind('storage.keyFile').to('GOOG1EA4H5LVLF2XHXKSUB3OGQRGOMAXN3JYLDQ7F4LVZGS4FXTOAW77OPHPT');
+    // this.bind('storage.bucketName').to('tour2wellness_bucket');
+    // const gcsCredentials = {
+    //   private_key: 'GOOG1EA4H5LVLF2XHXKSUB3OGQRGOMAXN3JYLDQ7F4LVZGS4FXTOAW77OPHPT',
+    //   client_email: 'vintee.afidigital@gmail.com',
+    //   project_id: 'silent-venture-405711',
+    // };
+    // const storage = new Storage({
+    //   credentials: gcsCredentials,
+    // });
+    // this.bind('services.GoogleCloudStorage').to(storage);
+    this.bind('storage.keyFile').to(path.join(__dirname,'../mykey.json'))
+    this.bind('storage.bucketName').to('tour2wellness_bucket');
 
     // Set up the custom sequence
     this.sequence(MySequence);
@@ -65,4 +83,5 @@ export class HtApiApplication extends BootMixin(
 
 
   }
+
 }

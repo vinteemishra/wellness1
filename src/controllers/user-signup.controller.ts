@@ -14,15 +14,11 @@ import {MyUserService} from '../services/user_service';
 import {validatecredentials} from '../services/validator';
 // import* from '../utils/sendMail';
 // import * as sendMail from '../utils/sendMail';
+import {get, param} from '@loopback/rest';
 import {HtDbMgDataSource} from '../datasources';
 import {sendEmail} from '../utils/sendMail';
-import * as nodemailer from 'nodemailer';
-import * as dotenv from 'dotenv';
-import {get} from '@loopback/rest';
-import { param } from '@loopback/rest';
 
 
-import {DefaultCrudRepository, juggler} from '@loopback/repository';
 require('dotenv').config();
 
 
@@ -68,25 +64,26 @@ export class UserSignupController {
     // @inject('services.jwt.service') public jwtService: TokenService,
 
 
-  ) {     this.tokenRepository = new TokenRepository(new HtDbMgDataSource());
+  ) {
+    this.tokenRepository = new TokenRepository(new HtDbMgDataSource());
   }
 
   @get('/users/{id}/verifyEmail/{token1}')
   async verifyEmail(
-  @param.path.string('id') id: string,
-  @param.path.string('token1') token1: string,
-): Promise<{ message: string }> {
-  try {
-    const user = await this.UserSignupRepository.findById(id);
-    console.log("happy",user)
-    user.verified = true;
-    await this.UserSignupRepository.update(user);
-    return { message: 'Email verified successfully' };
-  } catch (error) {
-    console.error('Error during email verification:', error);
-    throw new HttpErrors.InternalServerError('Internal Server Error');
+    @param.path.string('id') id: string,
+    @param.path.string('token1') token1: string,
+  ): Promise<{message: string}> {
+    try {
+      const user = await this.UserSignupRepository.findById(id);
+      console.log("happy", user)
+      user.verified = true;
+      await this.UserSignupRepository.update(user);
+      return {message: 'Email verified successfully'};
+    } catch (error) {
+      console.error('Error during email verification:', error);
+      throw new HttpErrors.InternalServerError('Internal Server Error');
+    }
   }
-}
 
   @post("/signup", {
     responses: {
@@ -127,7 +124,7 @@ export class UserSignupController {
 
 
     await sendEmail(saveduser.email, "verify email", url);
-    console.log("hellooo",saveduser.email);
+    console.log("hellooo", saveduser.email);
     // delete saveduser.password;
     // return saveduser;
     return {
@@ -187,19 +184,20 @@ export class UserSignupController {
       console.log("User:", user);
       if (user.verified) {
 
-      // Proceed with generating the token or any other logic
+        // Proceed with generating the token or any other logic
 
-      // return Promise.resolve({token: '899009888'});
-      // const generatedToken = '899009888'; // Replace this with your actual token generation logic
-      const response = {
-        token: token,
-        status: '200', // Add the status you want to send
-      };
-      // const userprofile=await this.userService.convertToUserProfile(user);
-      // console.log("new",userprofile);
+        // return Promise.resolve({token: '899009888'});
+        // const generatedToken = '899009888'; // Replace this with your actual token generation logic
+        const response = {
+          token: token,
+          status: '200', // Add the status you want to send
+        };
+        // const userprofile=await this.userService.convertToUserProfile(user);
+        // console.log("new",userprofile);
 
-      return Promise.resolve(response);}
-      else{throw new HttpErrors.Unauthorized('Email not verified');}
+        return Promise.resolve(response);
+      }
+      else {throw new HttpErrors.Unauthorized('Email not verified');}
       // return Promise.resolve({token: '899009888'});
     } catch (error) {
       // Catch and handle the error appropriately
