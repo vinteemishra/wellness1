@@ -23,9 +23,6 @@ import * as path from 'path';
 import {request} from 'http';
 
 
-
-
-
 export class ContactusController {
   constructor(
     @repository(ContactusRepository)
@@ -57,13 +54,6 @@ export class ContactusController {
     const { report, ...contactData } = contactus;
     // Save the contact information to MongoDB
     const savedContact = await this.contactusRepository.create(contactData);
-    const {Multer}=require ('multer');
-    // const multer=Multer({
-    //   storage:Multer.memoryStorage(),
-    //   limits:{
-    //     filesize:5*1024*1024
-    //   }
-    // })
     const {Storage} = require('@google-cloud/storage');
     let projectId="silent-venture-405711";
     let keyfilename=path.join(__dirname, '..', 'mykey.json');
@@ -75,36 +65,20 @@ export class ContactusController {
     });
     console.log(projectId);
     console.log(keyfilename)
-    // const bucket=storage.bucket('tour2wellness_bucket')
-
     const bucketName = 'tour2wellness_bucket';
-    // const filename = `report/${savedContact.id}.png`; // Assuming image is a PNG file
     const filename = `report/${savedContact.id}.png`; // Assuming image is a PNG file
-    let x=storage.getBuckets();
-    console.log("hiiii",x)
-
+    // let x=storage.getBuckets();
+    // console.log("hiiii",x)
 
     if (contactus.report) {
       let flag=1;
-      // const blob=bucket.file(request.file.originalname)
-      // const blobStream=blob.creatwritStream();
-      // blobStream.on('finish',()=>{
-      //   res.status(200).send('success');
 
-      // })
-      // blobStream.end(req.file.buffer);
       await storage.bucket(bucketName).file(filename).save(Buffer.from(contactus.report, 'base64'));
-      // await storage.bucket(bucketName).file(filename).createWriteStream({resumable: false, gzip: true})
+
     } else {
       // Handle the case where contactus.report is undefined
       console.error('Error: report is undefined');
     }
-
-    // await storage.bucket(bucketName).file(filename).save(Buffer.from(contactus.report, 'base64'));
-
-    // return savedContact;
-    // savedContact.report = undefined;
-    // return savedContact;
 
     return { ...savedContact, report: undefined } as Contactus;
 

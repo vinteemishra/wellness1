@@ -50,6 +50,9 @@ export class Contactus extends Entity {
   })
   report?: string;
 
+  // @property.array(String)
+  // report?: string[];
+
 
   constructor(data?: Partial<Contactus>) {
     super(data);
