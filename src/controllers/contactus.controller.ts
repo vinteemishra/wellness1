@@ -54,8 +54,9 @@ export class ContactusController {
     })
     contactus: Contactus,
   ): Promise<Contactus> {
+    const { report, ...contactData } = contactus;
     // Save the contact information to MongoDB
-    const savedContact = await this.contactusRepository.create(contactus);
+    const savedContact = await this.contactusRepository.create(contactData);
     const {Multer}=require ('multer');
     // const multer=Multer({
     //   storage:Multer.memoryStorage(),
@@ -66,6 +67,7 @@ export class ContactusController {
     const {Storage} = require('@google-cloud/storage');
     let projectId="silent-venture-405711";
     let keyfilename=path.join(__dirname, '..', 'mykey.json');
+
     const storage = new Storage({
       projectId,
       keyfilename,
@@ -83,6 +85,7 @@ export class ContactusController {
 
 
     if (contactus.report) {
+      let flag=1;
       // const blob=bucket.file(request.file.originalname)
       // const blobStream=blob.creatwritStream();
       // blobStream.on('finish',()=>{
@@ -99,31 +102,16 @@ export class ContactusController {
 
     // await storage.bucket(bucketName).file(filename).save(Buffer.from(contactus.report, 'base64'));
 
-    return savedContact;
+    // return savedContact;
+    // savedContact.report = undefined;
+    // return savedContact;
+
+    return { ...savedContact, report: undefined } as Contactus;
+
   }
 
 
 
-  // @post('/contactus')
-  // @response(200, {
-  //   description: 'Contactus model instance',
-  //   content: {'application/json': {schema: getModelSchemaRef(Contactus)}},
-  // })
-  // async create(
-  //   @requestBody({
-  //     content: {
-  //       'application/json': {
-  //         schema: getModelSchemaRef(Contactus, {
-  //           title: 'NewContactus',
-  //           exclude: ['id'],
-  //         }),
-  //       },
-  //     },
-  //   })
-  //   contactus: Omit<Contactus, 'id'>,
-  // ): Promise<Contactus> {
-  //   return this.contactusRepository.create(contactus);
-  // }
 
   @get('/contactus/count')
   @response(200, {
