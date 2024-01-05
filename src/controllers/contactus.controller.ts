@@ -46,7 +46,7 @@ export class ContactusController {
               contactno: {type: 'string'},
               details: {type: 'string'},
               speciality: {type: 'string'},
-              // report: {type: 'string'}, // Assuming image is a base64-encoded string
+              report: {type: 'string'}, // Assuming image is a base64-encoded string
             },
           },
         },
@@ -71,11 +71,15 @@ export class ContactusController {
       keyfilename,
 
     });
+    console.log(projectId);
+    console.log(keyfilename)
     // const bucket=storage.bucket('tour2wellness_bucket')
 
     const bucketName = 'tour2wellness_bucket';
     // const filename = `report/${savedContact.id}.png`; // Assuming image is a PNG file
     const filename = `report/${savedContact.id}.png`; // Assuming image is a PNG file
+    let x=storage.getBuckets();
+    console.log("hiiii",x)
 
 
     if (contactus.report) {
@@ -87,6 +91,7 @@ export class ContactusController {
       // })
       // blobStream.end(req.file.buffer);
       await storage.bucket(bucketName).file(filename).save(Buffer.from(contactus.report, 'base64'));
+      // await storage.bucket(bucketName).file(filename).createWriteStream({resumable: false, gzip: true})
     } else {
       // Handle the case where contactus.report is undefined
       console.error('Error: report is undefined');

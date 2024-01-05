@@ -6,6 +6,8 @@
     "rootDir": "src",
     "esModuleInterop": true,
     "moduleResolution": "node"
+
+
   },
   "include": ["src"]
 }
