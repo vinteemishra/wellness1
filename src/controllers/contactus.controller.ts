@@ -6,6 +6,7 @@ import {
   repository,
   Where,
 } from '@loopback/repository';
+
 import {
   post,
   param,
@@ -17,10 +18,24 @@ import {
   requestBody,
   response,
 } from '@loopback/rest';
+
 import {Contactus} from '../models';
 import {ContactusRepository} from '../repositories';
 import * as path from 'path';
 import {request} from 'http';
+// import { HttpResponse } from '@loopback/rest';
+
+import { RestBindings, Response } from '@loopback/rest';
+interface ContactusResponse {
+  data: Contactus;
+  status: number;
+}
+
+
+
+
+
+
 
 
 export class ContactusController {
@@ -71,7 +86,7 @@ export class ContactusController {
     // console.log("hiiii",x)
 
     if (contactus.report) {
-      let flag=1;
+
 
       await storage.bucket(bucketName).file(filename).save(Buffer.from(contactus.report, 'base64'));
 
@@ -80,14 +95,25 @@ export class ContactusController {
       console.error('Error: report is undefined');
     }
 
-    return { ...savedContact, report: undefined } as Contactus;
+
+    return { ...savedContact, report: undefined} as Contactus
+    // return { data: { ...savedContact, report: undefined }, status: 201 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   }
-
-
-
-
-  @get('/contactus/count')
+@get('/contactus/count')
   @response(200, {
     description: 'Contactus model count',
     content: {'application/json': {schema: CountSchema}},
