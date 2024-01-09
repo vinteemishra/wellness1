@@ -65,7 +65,9 @@ export class ContactusController {
       },
     })
     contactus: Contactus,
-  ): Promise<Contactus> {
+  ): Promise<{ status: string; data: Contactus }>
+  // Promise<Contactus>
+  {
     const { report, ...contactData } = contactus;
     // Save the contact information to MongoDB
     const savedContact = await this.contactusRepository.create(contactData);
@@ -94,25 +96,20 @@ export class ContactusController {
       // Handle the case where contactus.report is undefined
       console.error('Error: report is undefined');
     }
+    // savedContact.report = 'https://storage.cloud.google.com/tour2wellness_bucket/{filename}';
+    savedContact.report = filename;
+
+    await this.contactusRepository.updateById(savedContact.id, savedContact);
 
 
-    return { ...savedContact, report: undefined} as Contactus
+
+    // return { ...savedContact, report: undefined} as Contactus
     // return { data: { ...savedContact, report: undefined }, status: 201 };
+    // return savedContact;
+     return { status: '200', data: savedContact };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-  }
+}
 @get('/contactus/count')
   @response(200, {
     description: 'Contactus model count',
