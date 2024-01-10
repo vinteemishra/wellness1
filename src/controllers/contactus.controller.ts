@@ -26,6 +26,13 @@ import {request} from 'http';
 // import { HttpResponse } from '@loopback/rest';
 
 import { RestBindings, Response } from '@loopback/rest';
+// import {sendEmail} from '../utils/sendMail';
+// import { sendEmail } from '../services/email.service';
+import {sendEmail} from '../utils/sendmail1';
+import * as fs from 'fs';
+import { Buffer } from 'buffer'; // Import the Buffer module
+import {toString} from 'lodash';
+
 interface ContactusResponse {
   data: Contactus;
   status: number;
@@ -90,7 +97,12 @@ export class ContactusController {
     if (contactus.report) {
 
 
-      await storage.bucket(bucketName).file(filename).save(Buffer.from(contactus.report, 'base64'));
+       await storage.bucket(bucketName).file(filename).save(Buffer.from(contactus.report, 'base64'));
+      // fs.writeFileSync(attachmentPath, Buffer.from(contactus.report, 'base64'));
+
+      // // Upload the report to Google Cloud Storage
+      // await storage.bucket(bucketName).file(filename).save(Buffer.from(contactus.report, 'base64'));
+
 
     } else {
       // Handle the case where contactus.report is undefined
@@ -100,12 +112,18 @@ export class ContactusController {
     savedContact.report = filename;
 
     await this.contactusRepository.updateById(savedContact.id, savedContact);
+    
+    let baseurl='https://storage.cloud.google.com/tour2wellness_bucket/'
+
+    const attachmentBuffer = Buffer.from(savedContact.report, 'base64')
 
 
 
-    // return { ...savedContact, report: undefined} as Contactus
-    // return { data: { ...savedContact, report: undefined }, status: 201 };
-    // return savedContact;
+
+    // await sendEmail('m.mathur@afidigitalservices.com', 'contact_us', 'Plz find the attachment of report', attachmentBuffer, baseurl+savedContact.report);
+    await sendEmail('vinteeshukla@gmail.com', 'contact_us', 'Plz find the attachment of report', attachmentBuffer, baseurl+savedContact.report);
+
+
      return { status: '200', data: savedContact };
 
 
