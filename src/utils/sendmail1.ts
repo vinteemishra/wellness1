@@ -1,10 +1,16 @@
 import { SendMailOptions, Transporter } from 'nodemailer';
 import * as nodemailer from 'nodemailer';
-// let baseurl='https://storage.cloud.google.com/tour2wellness_bucket/';
+import * as path from 'path';
+import * as fs from 'fs';
 
 
 
-export async function sendEmail(email: string, subject: string, text: string, attachment?: Buffer, attachmentName?: string) {
+
+let baseurl='https://storage.cloud.google.com/tour2wellness_bucket/';
+
+
+
+export async function sendEmail(email: string, subject: string, text: string, attachment?: string, attachmentName?: string) {
   console.log("hello",attachmentName);
   console.log(attachment);
   try {
@@ -30,21 +36,28 @@ export async function sendEmail(email: string, subject: string, text: string, at
       text: text,
       attachments: [],
     };
+    console.log("test",attachment,attachmentName,baseurl);
 
     if (attachment && attachmentName) {
+      // const attachmentBase64 = fs.readFileSync(`${baseurl}${attachmentName}`, 'base64');
+
 
 
       const attachmentObject = {
-        filename: attachmentName,
-        // path: `${baseurl}/${attachmentName}`,
-        href: attachmentName,
+        filename: `${baseurl}${attachmentName}`,
+        path: `${baseurl}${attachmentName}`,
+        // href: 'https://storage.cloud.google.com/tour2wellness_bucket/' + attachmentName,
+        href: `https://storage.googleapis.com/tour2wellness_bucket/${attachmentName}`,
 
-        content: attachmentName,
-        encoding: 'base64', // Specify the encoding
+
+
+        content: attachment,
+        encoding: 'base64',
         contentType: 'image/png',
       };
       mailOptions.attachments = [attachmentObject];
     }
+
 
     await transporter.sendMail(mailOptions);
 
