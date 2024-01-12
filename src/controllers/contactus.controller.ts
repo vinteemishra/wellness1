@@ -55,6 +55,7 @@ export class ContactusController {
   // attachmentBase64: string;
 
 
+
   @post('/contacts')
   async createContact(
     @requestBody({
@@ -91,10 +92,69 @@ export class ContactusController {
       keyfilename,
 
     });
+    function extractFileExtension(base64Data: string): string | null {
+
+
+      // Regular expression to match the mime type from base64 data
+      const mimeRegex = /^data:(.*?);base64,/;
+      if (base64Data === undefined) {
+        // Handle the case where base64Data is undefined
+        return null;
+      }
+
+      // Match the mime type
+      const mimeMatch = base64Data.match(mimeRegex);
+
+      if (!mimeMatch || mimeMatch.length < 2) {
+        // Unable to extract mime type
+        return null;
+      }
+
+      const mimeType = mimeMatch[1];
+
+
+      // Regular expression to match the file extension from mime type
+      const extensionRegex =/\.([^.]+)$/;
+
+      // Match the file extension
+      // const extensionMatch = mimeType.match(extensionRegex);
+      const extensionMatch = mimeType.split('/').pop();
+
+
+      if (!extensionMatch || extensionMatch.length < 2) {
+        // Unable to extract file extension
+        return null;
+      }
+
+      return extensionMatch[1] || null;
+    }
+
+
+    // Example usage
+    // const base64Data = 'data:image/png;base64,iVBORw...';
+    const fileExtension = extractFileExtension(contactus.report as string);
+    console.log("contactus.report",contactus.report)
+    const defaultExtension = contactus.details;
+    console.log("details",contactus.details)
+
+
+    if (fileExtension) {
+      console.log(`File Extension: ${fileExtension}`);
+    } else {
+      console.error('Unable to determine file extension.');
+    }
+
+
+
     console.log(projectId);
     console.log(keyfilename)
     const bucketName = 'tour2wellness_bucket';
-    const filename = `report/${savedContact.id}.png`; // Assuming image is a PNG file
+    // const filename = `report/${savedContact.id}.png` ; // Assuming image is a PNG file
+    const filename = `report/${savedContact.id}.${fileExtension || defaultExtension}`;
+
+
+
+
     // let x=storage.getBuckets();
     // console.log("hiiii",x)
 
