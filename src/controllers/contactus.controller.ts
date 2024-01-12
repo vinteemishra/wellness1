@@ -135,7 +135,7 @@ export class ContactusController {
     // const base64Data = 'data:image/png;base64,iVBORw...';
     const fileExtension = extractFileExtension(contactus.report as string);
     console.log("contactus.report",contactus.report)
-    const defaultExtension = contactus.details;
+    const defaultExtension = 'png';
     console.log("details",contactus.details)
 
 
