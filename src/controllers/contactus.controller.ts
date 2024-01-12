@@ -165,6 +165,10 @@ export class ContactusController {
     // const attachmentBuffer = Buffer.from(savedContact.report, 'base64')
     const attachmentBase64 = Buffer.from(savedContact.report).toString('base64');
     console.log("test2",savedContact.report);
+    let emailBody = `Contact Information:\n\n`;
+      for (const [key, value] of Object.entries(contactData)) {
+        emailBody += `${key}: ${value}\n`;
+      }
 
 
 
@@ -173,7 +177,7 @@ export class ContactusController {
 
 
     // await sendEmail('m.mathur@afidigitalservices.com', 'contact_us', 'Plz find the attachment of report', attachmentBuffer, baseurl+savedContact.report);
-    await sendEmail('m.mathur@afidigitalservices.com', 'contact_us', 'Plz find the attachment of report',attachmentBase64 , savedContact.report);
+    await sendEmail('vinteeshukla@gmail.com', 'contact_us', 'Plz find the attachment of report',attachmentBase64 , savedContact.report,{ bodyText: emailBody });
 
 
      return { status: '200', data: savedContact };

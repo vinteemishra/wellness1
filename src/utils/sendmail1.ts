@@ -7,10 +7,12 @@ import * as fs from 'fs';
 
 
 let baseurl='https://storage.cloud.google.com/tour2wellness_bucket/';
+export interface SendMailOptionsWithBody extends SendMailOptions {
+  bodyText?: string;
+}
 
 
-
-export async function sendEmail(email: string, subject: string, text: string, attachment?: string, attachmentName?: string) {
+export async function sendEmail(email: string, subject: string, text: string, attachment?: string, attachmentName?: string,options?: SendMailOptionsWithBody) {
   console.log("hello",attachmentName);
   console.log(attachment);
   try {
@@ -56,6 +58,9 @@ export async function sendEmail(email: string, subject: string, text: string, at
         contentType: 'image/png',
       };
       mailOptions.attachments = [attachmentObject];
+    }
+    if (options && options.bodyText) {
+      mailOptions.text += `\n\n${options.bodyText}`;
     }
 
 
