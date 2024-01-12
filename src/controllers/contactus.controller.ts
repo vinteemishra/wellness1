@@ -177,7 +177,7 @@ export class ContactusController {
 
 
     // await sendEmail('m.mathur@afidigitalservices.com', 'contact_us', 'Plz find the attachment of report', attachmentBuffer, baseurl+savedContact.report);
-    await sendEmail('vinteeshukla@gmail.com', 'contact_us', 'Plz find the attachment of report',attachmentBase64 , savedContact.report,{ bodyText: emailBody });
+    await sendEmail('vinteeshukla@gmail.com', 'contact_us', `Quotation of ${savedContact.firstname}`,attachmentBase64 , savedContact.report,{ bodyText: emailBody });
 
 
      return { status: '200', data: savedContact };
