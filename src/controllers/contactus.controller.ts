@@ -96,7 +96,8 @@ export class ContactusController {
 
 
       // Regular expression to match the mime type from base64 data
-      const mimeRegex = /^data:(.*?);base64,/;
+      // const mimeRegex = /^data:(.*?);base64,/;
+      const mimeRegex = /^data:([^;]+);base64,/;
       if (base64Data === undefined) {
         // Handle the case where base64Data is undefined
         return null;
