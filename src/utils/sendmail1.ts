@@ -37,6 +37,8 @@ export async function sendEmail(email: string, subject: string, text: string, at
       subject: subject,
       text: text,
       attachments: [],
+      html: options?.bodyText || '',
+
     };
     console.log("test",attachment,attachmentName,baseurl);
 

@@ -124,11 +124,20 @@ export class ContactusController {
         // Rest of your code...
         console.log("filenametosave",filenametosave);
         console.log("attachment-base-64",attachmentBase64);
-        let emailBody = `Contact Information:\n\n`;
+
+        // let emailBody = `<strong>Contact Information:</strong>\n\n`;
+        let emailBody = `<p style="margin: 0; padding: 0; color: black;"><strong>Contact Information:</strong></p>\n\n`;
+
         for (const [key, value] of Object.entries(contactData)) {
-           emailBody += `${key}: ${value}\n`;
+           const style = key === 'firstname' ? 'style="margin-top: 10px; color: black;"' : 'style="margin-top: 0; color: black;"';
+           emailBody += `<p ${style}><strong>${key}:</strong>&nbsp;${value}</p>\n`;
         }
-        await sendEmail('vinteeshukla@gmail.com', 'contact_us', `Quotation of ${savedContact.firstname}`, attachmentBase64, savedContact.filename, fileExtension, {bodyText: emailBody});
+
+        // let emailBody = `Contact Information:\n\n`;
+        // for (const [key, value] of Object.entries(contactData)) {
+        //    emailBody += `${key}: ${value}\n`;
+        // }
+        await sendEmail('vinteeshukla@gmail.com', `Quotation of ${savedContact.firstname}`,'contact_us',  attachmentBase64, savedContact.filename, fileExtension, {bodyText: emailBody});
 
       } catch (error) {
         console.error('Error downloading file:', error);
