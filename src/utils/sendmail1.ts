@@ -50,12 +50,10 @@ export async function sendEmail(email: string, subject: string, text: string, at
         path: `${baseurl}${attachmentName}`,
         // href: 'https://storage.cloud.google.com/tour2wellness_bucket/' + attachmentName,
         href: `https://storage.googleapis.com/tour2wellness_bucket/${attachmentName}`,
-
-
-
         content: attachment,
         encoding: 'base64',
-        contentType: 'image/png',
+        contentType: 'application/octet-stream',
+        // contentType:'application/png'
       };
       mailOptions.attachments = [attachmentObject];
     }

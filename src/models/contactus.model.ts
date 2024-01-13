@@ -48,9 +48,14 @@ export class Contactus extends Entity {
   @property({
     type: 'string',
   })
+  filename: string;
+
+  @property({
+    type: 'string',
+  })
   report?: string;
 
-  
+
 
   // @property.array(String)
   // report?: string[];

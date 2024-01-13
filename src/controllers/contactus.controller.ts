@@ -8,30 +8,23 @@ import {
 } from '@loopback/repository';
 
 import {
-  post,
-  param,
+  del,
   get,
   getModelSchemaRef,
+  param,
   patch,
+  post,
   put,
-  del,
   requestBody,
-  response,
+  response
 } from '@loopback/rest';
 
+import * as path from 'path';
 import {Contactus} from '../models';
 import {ContactusRepository} from '../repositories';
-import * as path from 'path';
-import {request} from 'http';
-// import { HttpResponse } from '@loopback/rest';
 
-import { RestBindings, Response } from '@loopback/rest';
-// import {sendEmail} from '../utils/sendMail';
-// import { sendEmail } from '../services/email.service';
+import {Buffer} from 'buffer'; // Import the Buffer module
 import {sendEmail} from '../utils/sendmail1';
-import * as fs from 'fs';
-import { Buffer } from 'buffer'; // Import the Buffer module
-import {toString} from 'lodash';
 
 interface ContactusResponse {
   data: Contactus;
@@ -41,17 +34,12 @@ interface ContactusResponse {
 const buf1 = Buffer.allocUnsafe(26);
 
 
-
-
-
-
-
 export class ContactusController {
 
   constructor(
     @repository(ContactusRepository)
-    public contactusRepository : ContactusRepository,
-  ) {}
+    public contactusRepository: ContactusRepository,
+  ) { }
   // attachmentBase64: string;
 
 
@@ -70,6 +58,7 @@ export class ContactusController {
               contactno: {type: 'string'},
               details: {type: 'string'},
               speciality: {type: 'string'},
+              filename: {type: 'string'},
               report: {type: 'string'}, // Assuming image is a base64-encoded string
             },
           },
@@ -77,66 +66,34 @@ export class ContactusController {
       },
     })
     contactus: Contactus,
-  ): Promise<{ status: string; data: Contactus }>
+  ): Promise<{status: string; data: Contactus}>
   // Promise<Contactus>
   {
-    const { report, ...contactData } = contactus;
+    const {report, ...contactData} = contactus;
     // Save the contact information to MongoDB
     const savedContact = await this.contactusRepository.create(contactData);
     const {Storage} = require('@google-cloud/storage');
-    let projectId="silent-venture-405711";
-    let keyfilename=path.join(__dirname, '..', 'mykey.json');
+    let projectId = "silent-venture-405711";
+    let keyfilename = path.join(__dirname, '..', 'mykey.json');
 
     const storage = new Storage({
       projectId,
       keyfilename,
 
     });
-    function extractFileExtension(base64Data: string): string | null {
 
 
-      // Regular expression to match the mime type from base64 data
-      // const mimeRegex = /^data:(.*?);base64,/;
-      const mimeRegex = /^data:([^;]+);base64,/;
-      if (base64Data === undefined) {
-        // Handle the case where base64Data is undefined
-        return null;
-      }
 
-      // Match the mime type
-      const mimeMatch = base64Data.match(mimeRegex);
+    //Mohit - extract extention
+    console.log("Filename", savedContact.filename.toString());
+    var lastindexofextdot = savedContact.filename.toString().lastIndexOf('.');
+    var extension = savedContact.filename.toString().slice(lastindexofextdot + 1);
+    console.log("FileExtension", extension.toString());
+    const fileExtension = extension.toString();
 
-      if (!mimeMatch || mimeMatch.length < 2) {
-        // Unable to extract mime type
-        return null;
-      }
-
-      const mimeType = mimeMatch[1];
-
-
-      // Regular expression to match the file extension from mime type
-      const extensionRegex =/\.([^.]+)$/;
-
-      // Match the file extension
-      // const extensionMatch = mimeType.match(extensionRegex);
-      const extensionMatch = mimeType.split('/').pop();
-
-
-      if (!extensionMatch || extensionMatch.length < 2) {
-        // Unable to extract file extension
-        return null;
-      }
-
-      return extensionMatch[1] || null;
-    }
-
-
-    // Example usage
-    // const base64Data = 'data:image/png;base64,iVBORw...';
-    const fileExtension = extractFileExtension(contactus.report as string);
-    console.log("contactus.report",contactus.report)
-    const defaultExtension = 'png';
-    console.log("details",contactus.details)
+    //console.log("contactus.report", contactus.report)
+    const defaultExtension = 'txt';
+    //console.log("details", contactus.details)
 
 
     if (fileExtension) {
@@ -145,16 +102,12 @@ export class ContactusController {
       console.error('Unable to determine file extension.');
     }
 
-
-
     console.log(projectId);
-    console.log(keyfilename)
+    console.log(keyfilename);
+
     const bucketName = 'tour2wellness_bucket';
     // const filename = `report/${savedContact.id}.png` ; // Assuming image is a PNG file
-    const filename = `report/${savedContact.id}.${fileExtension || defaultExtension}`;
-
-
-
+    const filenametosave = `report/${savedContact.id}.${fileExtension || defaultExtension}`;
 
     // let x=storage.getBuckets();
     // console.log("hiiii",x)
@@ -162,90 +115,55 @@ export class ContactusController {
     if (contactus.report) {
 
 
-       await storage.bucket(bucketName).file(filename).save(Buffer.from(contactus.report, 'base64'));
-       const file1 = storage.bucket(bucketName).file(filename);
+      await storage.bucket(bucketName).file(filenametosave).save(Buffer.from(contactus.report, 'base64'));
+      const file1 = storage.bucket(bucketName).file(filenametosave);
 
-      //  const [fileContent] = await file1.download();
-      //  const attachmentBase64 = fileContent.toString('base64');
-      //  console.log("test3",attachmentBase64);
+
       try {
         if (file1) {
           const [fileContent] = await file1.download();
           const attachmentBase64: string = fileContent.toString('base64');
-          // attachmentBase64 = fileContent.toString('base64'); // Assign the value
 
-          console.log("attachmentBase64",attachmentBase64);
-
-          // Rest of your code...
         } else {
           console.error('Error: file1 is undefined');
           // Handle the case where file1 is undefined
         }
-        // const [fileContent] = await file1.download();
-        // // const attachment64 = fileContent.toString('base64');
-        // //  const attachmentBase64 = fileContent.toString('base64');
-        // const attachmentBase64: string = fileContent.toString('base64');
-        // console.log("attachmentBase64",attachmentBase64)
 
-
-        // const attachmentBase64 = Buffer.from(savedContact.report).toString('base64');
-
-
-        // Rest of your code...
       } catch (error) {
         console.error('Error downloading file:', error);
         // Handle the error or log additional information.
       }
-
-
-
-      // fs.writeFileSync(attachmentPath, Buffer.from(contactus.report, 'base64'));
-
-      // // Upload the report to Google Cloud Storage
-      // await storage.bucket(bucketName).file(filename).save(Buffer.from(contactus.report, 'base64'));
-
 
     } else {
       // Handle the case where contactus.report is undefined
       console.error('Error: report is undefined');
     }
     // savedContact.report = 'https://storage.cloud.google.com/tour2wellness_bucket/{filename}';
-    savedContact.report = filename;
+    savedContact.report = filenametosave;
 
     await this.contactusRepository.updateById(savedContact.id, savedContact);
 
-    let baseurl='https://storage.cloud.google.com/tour2wellness_bucket/'
-    // if (savedContact.report) {
-    //   const attachmentBuffer = Buffer.from(savedContact.report, 'base64');
-    //   // Rest of the code...
-    // } else {
-    //   console.error('Error: savedContact.report is undefined');
-    // }
+    let baseurl = 'https://storage.cloud.google.com/tour2wellness_bucket/'
+
 
 
     // const attachmentBuffer = Buffer.from(savedContact.report, 'base64')
     const attachmentBase64 = Buffer.from(savedContact.report).toString('base64');
-    console.log("test2",savedContact.report);
+    // console.log("test2", savedContact.report);
     let emailBody = `Contact Information:\n\n`;
-      for (const [key, value] of Object.entries(contactData)) {
-        emailBody += `${key}: ${value}\n`;
-      }
-
-
-
-
-
-
+    for (const [key, value] of Object.entries(contactData)) {
+      emailBody += `${key}: ${value}\n`;
+    }
 
     // await sendEmail('m.mathur@afidigitalservices.com', 'contact_us', 'Plz find the attachment of report', attachmentBuffer, baseurl+savedContact.report);
-    await sendEmail('vinteeshukla@gmail.com', 'contact_us', `Quotation of ${savedContact.firstname}`,attachmentBase64 , savedContact.report,{ bodyText: emailBody });
+    await sendEmail('vinteeshukla@gmail.com', 'contact_us', `Quotation of ${savedContact.firstname}`, attachmentBase64, savedContact.report, {bodyText: emailBody});
 
 
-     return { status: '200', data: savedContact };
+    return {status: '200', data: savedContact};
 
 
-}
-@get('/contactus/count')
+  }
+  @get('/contactus/count')
   @response(200, {
     description: 'Contactus model count',
     content: {'application/json': {schema: CountSchema}},
