@@ -118,6 +118,23 @@ export class ContactusController {
       await storage.bucket(bucketName).file(filenametosave).save(Buffer.from(contactus.report, 'base64'));
       const file1 = storage.bucket(bucketName).file(filenametosave);
 
+      try {
+        const [downloadedFile] = await storage.bucket(bucketName).file(filenametosave).download();
+        const attachmentBase64: string = downloadedFile.toString('base64');
+        // Rest of your code...
+        console.log("filenametosave",filenametosave);
+        console.log("attachment-base-64",attachmentBase64);
+        let emailBody = `Contact Information:\n\n`;
+        for (const [key, value] of Object.entries(contactData)) {
+           emailBody += `${key}: ${value}\n`;
+        }
+        await sendEmail('vinteeshukla@gmail.com', 'contact_us', `Quotation of ${savedContact.firstname}`, attachmentBase64, savedContact.filename, fileExtension, {bodyText: emailBody});
+
+      } catch (error) {
+        console.error('Error downloading file:', error);
+        // Handle the error or log additional information.
+      }
+
 
       try {
         if (file1) {
@@ -147,16 +164,17 @@ export class ContactusController {
 
 
 
-    // const attachmentBuffer = Buffer.from(savedContact.report, 'base64')
-    const attachmentBase64 = Buffer.from(savedContact.report).toString('base64');
-    // console.log("test2", savedContact.report);
-    let emailBody = `Contact Information:\n\n`;
-    for (const [key, value] of Object.entries(contactData)) {
-      emailBody += `${key}: ${value}\n`;
-    }
 
-    // await sendEmail('m.mathur@afidigitalservices.com', 'contact_us', 'Plz find the attachment of report', attachmentBuffer, baseurl+savedContact.report);
-    await sendEmail('vinteeshukla@gmail.com', 'contact_us', `Quotation of ${savedContact.firstname}`, attachmentBase64, savedContact.report,fileExtension, {bodyText: emailBody});
+    // const attachmentBase64 = Buffer.from(savedContact.report).toString('base64');
+    // console.log("attachment-base64",attachmentBase64)
+
+    // let emailBody = `Contact Information:\n\n`;
+    // for (const [key, value] of Object.entries(contactData)) {
+    //   emailBody += `${key}: ${value}\n`;
+    // }
+
+    // // await sendEmail('m.mathur@afidigitalservices.com', 'contact_us', 'Plz find the attachment of report', attachmentBuffer, baseurl+savedContact.report);
+    // await sendEmail('vinteeshukla@gmail.com', 'contact_us', `Quotation of ${savedContact.firstname}`, attachmentBase64, savedContact.report,fileExtension, {bodyText: emailBody});
 
 
     return {status: '200', data: savedContact};
