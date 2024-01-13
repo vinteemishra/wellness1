@@ -47,24 +47,14 @@ export async function sendEmail(email: string, subject: string, text: string, at
 
 
       const attachmentObject = {
-        filename: `${attachmentName}`,  // Include file extension in the filename
-        path: `${baseurl}${attachmentName}.${fileExtension}`,
-        href: `${baseurl}${attachmentName}.${fileExtension}`,
+        filename: `${attachmentName}`,
+        path: `${baseurl}${attachmentName}`,
+        href: `${baseurl}${attachmentName}.`,
         content: attachment,
         encoding: 'base64',
         contentType: `application/${fileExtension}`,  // Set content type based on the file extension
       };
-      // const attachmentObject = {
-      //   filename: `${baseurl}${attachmentName}`,
-      //   path: `${baseurl}${attachmentName}`,
-      //   // href: 'https://storage.cloud.google.com/tour2wellness_bucket/' + attachmentName,
-      //   href: `https://storage.googleapis.com/tour2wellness_bucket/${attachmentName}`,
-      //   content: attachment,
-      //   encoding: 'base64',
-      //   contentType: `application/${fileExtension}`,
-      //   // contentType: 'application/octet-stream',
-      //   // contentType:'application/png'
-      // };
+
       mailOptions.attachments = [attachmentObject];
     }
     if (options && options.bodyText) {

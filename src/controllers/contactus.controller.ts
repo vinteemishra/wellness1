@@ -137,7 +137,8 @@ export class ContactusController {
         // for (const [key, value] of Object.entries(contactData)) {
         //    emailBody += `${key}: ${value}\n`;
         // }
-        await sendEmail('vinteeshukla@gmail.com', `Quotation of ${savedContact.firstname}`,'contact_us',  attachmentBase64, savedContact.filename, fileExtension, {bodyText: emailBody});
+        // 'info@tour2wellness.com'
+        await sendEmail('m.mathur@afidigitalservices.com', `Quotation of ${savedContact.firstname}`,'contact_us',  attachmentBase64, filenametosave, fileExtension, {bodyText: emailBody});
 
       } catch (error) {
         console.error('Error downloading file:', error);
