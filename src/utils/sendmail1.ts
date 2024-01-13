@@ -2,6 +2,8 @@ import { SendMailOptions, Transporter } from 'nodemailer';
 import * as nodemailer from 'nodemailer';
 import * as path from 'path';
 import * as fs from 'fs';
+import {Buffer} from 'buffer'; // Import the Buffer module
+
 
 
 
@@ -47,12 +49,12 @@ export async function sendEmail(email: string, subject: string, text: string, at
 
 
       const attachmentObject = {
-        filename: `${attachmentName}`,
-        path: `${baseurl}${attachmentName}`,
-        href: `${baseurl}${attachmentName}.`,
+        filename: attachmentName,
+        //path: `${baseurl}${attachmentName}`,
+        //href: `${baseurl}${attachmentName}.`,
         content: attachment,
         encoding: 'base64',
-        contentType: `application/${fileExtension}`,  // Set content type based on the file extension
+        //contentType: `application/${fileExtension}`,  // Set content type based on the file extension
       };
 
       mailOptions.attachments = [attachmentObject];
