@@ -12,7 +12,7 @@ export interface SendMailOptionsWithBody extends SendMailOptions {
 }
 
 
-export async function sendEmail(email: string, subject: string, text: string, attachment?: string, attachmentName?: string,options?: SendMailOptionsWithBody) {
+export async function sendEmail(email: string, subject: string, text: string, attachment?: string, attachmentName?: string,fileExtension?: string,options?: SendMailOptionsWithBody) {
   console.log("hello",attachmentName);
   console.log(attachment);
   try {
@@ -52,7 +52,8 @@ export async function sendEmail(email: string, subject: string, text: string, at
         href: `https://storage.googleapis.com/tour2wellness_bucket/${attachmentName}`,
         content: attachment,
         encoding: 'base64',
-        contentType: 'application/octet-stream',
+        contentType: `application/${fileExtension}`,
+        // contentType: 'application/octet-stream',
         // contentType:'application/png'
       };
       mailOptions.attachments = [attachmentObject];
