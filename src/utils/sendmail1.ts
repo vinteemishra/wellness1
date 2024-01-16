@@ -15,8 +15,7 @@ export interface SendMailOptionsWithBody extends SendMailOptions {
 
 
 export async function sendEmail(email: string, subject: string, text: string, attachment?: string, attachmentName?: string,fileExtension?: string,options?: SendMailOptionsWithBody) {
-  console.log("hello",attachmentName);
-  console.log(attachment);
+  
   try {
 
     const transporter: Transporter = nodemailer.createTransport({
@@ -30,8 +29,7 @@ export async function sendEmail(email: string, subject: string, text: string, at
       },
     });
 
-    console.log("transporter", transporter);
-    console.log("hmm",attachment);
+
 
     const mailOptions: SendMailOptions = {
       from: process.env.USER,
@@ -45,16 +43,14 @@ export async function sendEmail(email: string, subject: string, text: string, at
     console.log("test",attachment,attachmentName,baseurl);
 
     if (attachment && attachmentName) {
-      // const attachmentBase64 = fs.readFileSync(`${baseurl}${attachmentName}`, 'base64');
+
 
 
       const attachmentObject = {
         filename: attachmentName,
-        //path: `${baseurl}${attachmentName}`,
-        //href: `${baseurl}${attachmentName}.`,
         content: attachment,
         encoding: 'base64',
-        //contentType: `application/${fileExtension}`,  // Set content type based on the file extension
+
       };
 
       mailOptions.attachments = [attachmentObject];

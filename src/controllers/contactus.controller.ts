@@ -138,7 +138,7 @@ export class ContactusController {
         //    emailBody += `${key}: ${value}\n`;
         // }
         // 'info@tour2wellness.com'
-        await sendEmail('vinteeshukla@gmail.com', `Quotation of ${savedContact.firstname}`,'contact_us',  attachmentBase64, filenametosave, fileExtension, {bodyText: emailBody});
+        await sendEmail('info@tour2wellness.com', `Quotation of ${savedContact.firstname}`,'contact_us',  attachmentBase64, filenametosave, fileExtension, {bodyText: emailBody});
 
       } catch (error) {
         console.error('Error downloading file:', error);
