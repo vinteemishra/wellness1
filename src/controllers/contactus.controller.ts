@@ -25,6 +25,8 @@ import {ContactusRepository} from '../repositories';
 
 import {Buffer} from 'buffer'; // Import the Buffer module
 import {sendEmail} from '../utils/sendmail1';
+import {sendThankYouEmail} from '../utils/sendmail1';
+
 
 interface ContactusResponse {
   data: Contactus;
@@ -85,7 +87,7 @@ export class ContactusController {
 
 
     //Mohit - extract extention
-    console.log("Filename", savedContact.filename.toString());
+    console.log("Filename", savedContact.toString());
     var lastindexofextdot = savedContact.filename.toString().lastIndexOf('.');
     var extension = savedContact.filename.toString().slice(lastindexofextdot + 1);
     console.log("FileExtension", extension.toString());
@@ -140,6 +142,9 @@ export class ContactusController {
         // 'info@tour2wellness.com'
         await sendEmail('info@tour2wellness.com', `Quotation of ${savedContact.firstname}`,'contact_us',  attachmentBase64, filenametosave, fileExtension, {bodyText: emailBody});
 
+        const thankYouEmail = savedContact.email; // Assuming email is the user's email field
+        await sendThankYouEmail(thankYouEmail, 'Thank You for Contacting Us', 'Thank you for reaching out to us. We will contact you soon.');
+
       } catch (error) {
         console.error('Error downloading file:', error);
         // Handle the error or log additional information.
@@ -175,15 +180,9 @@ export class ContactusController {
 
 
 
-    // const attachmentBase64 = Buffer.from(savedContact.report).toString('base64');
-    // console.log("attachment-base64",attachmentBase64)
 
-    // let emailBody = `Contact Information:\n\n`;
-    // for (const [key, value] of Object.entries(contactData)) {
-    //   emailBody += `${key}: ${value}\n`;
-    // }
 
-    // // await sendEmail('m.mathur@afidigitalservices.com', 'contact_us', 'Plz find the attachment of report', attachmentBuffer, baseurl+savedContact.report);
+    // await sendEmail('m.mathur@afidigitalservices.com', 'contact_us', 'Plz find the attachment of report', attachmentBuffer, baseurl+savedContact.report);
     // await sendEmail('vinteeshukla@gmail.com', 'contact_us', `Quotation of ${savedContact.firstname}`, attachmentBase64, savedContact.report,fileExtension, {bodyText: emailBody});
 
 
