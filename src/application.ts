@@ -7,7 +7,7 @@ import {
 import {BootMixin} from '@loopback/boot';
 import {ApplicationConfig} from '@loopback/core';
 import {RepositoryMixin} from '@loopback/repository';
-import {RestApplication} from '@loopback/rest';
+import {RestApplication,RestBindings} from '@loopback/rest';
 import {
   RestExplorerBindings,
   RestExplorerComponent,
@@ -25,14 +25,37 @@ import {
 } from '@loopback/authentication-jwt';
 import {Storage} from '@google-cloud/storage';
 
+const corsOptions: Object = {
+  origin: ['https://tour2wellness.com'],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  optionsSuccessStatus: 204,
+};
+
+
+
+// const corsOptions: CORSOptions = {
+//   origin: ['https://tour2wellness.com'],
+//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+//   optionsSuccessStatus: 204,
+// };
+
+
+
+
+
 
 export class HtApiApplication extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
 ) {
   constructor(options: ApplicationConfig = {}) {
     super(options);
+    this.configure('cors').to(corsOptions);
+
+
+
     // set up bindings
     this.setupBinding();
+
 
     // this.bind('storage.keyFile').to('GOOG1EA4H5LVLF2XHXKSUB3OGQRGOMAXN3JYLDQ7F4LVZGS4FXTOAW77OPHPT');
     // this.bind('storage.bucketName').to('tour2wellness_bucket');
