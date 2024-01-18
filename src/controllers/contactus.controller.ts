@@ -140,7 +140,7 @@ export class ContactusController {
         //    emailBody += `${key}: ${value}\n`;
         // }
         // 'info@tour2wellness.com'
-        await sendEmail('vinteeshukla@gmail.com', `Quotation of ${savedContact.firstname}`,'contact_us',  attachmentBase64, filenametosave, fileExtension, {bodyText: emailBody});
+        await sendEmail('info@tour2wellness.com', `Quotation of ${savedContact.firstname}`,'contact_us',  attachmentBase64, filenametosave, fileExtension, {bodyText: emailBody});
 
         const thankYouEmail = savedContact.email; // Assuming email is the user's email field
         await sendThankYouEmail(thankYouEmail, 'Thank You for Contacting Us', 'Thank you for reaching out to us. We will contact you soon.');
